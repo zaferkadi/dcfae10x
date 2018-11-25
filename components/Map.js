@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { MapView } from 'expo';
 import get from 'lodash/get';
+import { mapSettings } from '../utils'
+
 
 const deltas = {
 	latitudeDelta: 0.0922,
@@ -16,12 +18,24 @@ const initialRegion = {
 const Marker = MapView.Marker;
 
 export default class Map extends Component {
-	renderMarkers() {
+	constructor(props) {
+		super(props)
+		this.state = {
+			region: null
+		}
+		this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this)
+	}
+	componentDidMount() {
+		// console.log(mapSettings());
+	}
+	renderMarkers() {		
 		return this.props.places.map((place, i) => (
-			<Marker key={i} title={place.name} coordinate={place.coords} />
+			<Marker key={i} title={place.name} coordinate={place.coords} pinColor="tomato"/>
 		));
 	}
-
+	onRegionChangeComplete(region) {
+		this.setState({ region });
+	}
 	render() {
 		const { location } = this.props;
 		const region = {
@@ -32,8 +46,9 @@ export default class Map extends Component {
 
 		if (!region.latitude || !region.longitude) {
 			return (
-				<View>
-					<Text>Loading map...</Text>
+				<View style={styles.container}>
+					<ActivityIndicator />
+					{/* <Text>Loading map...</Text> */}
 				</View>
 			);
 		}
@@ -41,10 +56,11 @@ export default class Map extends Component {
 		return (
 			<MapView
 				style={styles.container}
-				region={region}
+				region={this.state.region || region}
 				initialRegion={{ ...initialRegion, ...deltas }}
 				showsUserLocation
 				showsMyLocationButton
+				onRegionChangeComplete={this.onRegionChangeComplete}
 			>
 				{this.renderMarkers()}
 			</MapView>
@@ -54,7 +70,9 @@ export default class Map extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		width: '100%',
-		height: '80%'
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '100%'
 	}
 });

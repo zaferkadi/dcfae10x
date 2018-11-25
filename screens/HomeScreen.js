@@ -5,33 +5,17 @@ import { Button } from 'react-native-elements';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
 
-import YelpService from '../services/yelp';
+import BikesService from '../services/bikes';
 import Map from '../components/Map';
 
 class HomeScreen extends Component {
 	filterButtons = [
         { 
-            label: 'Reported Stolen Bikes', 
-            color: '#9C27B0', 
+            label: 'Report A Stolen Bike', 
+            color: 'coral', 
             filter: { openNow: true }, 
             icon: {name: 'bicycle', style: 'regular',type: 'font-awesome'}
-        },
-		// { label: 'Starbucks', color: '#E91E63', filter: { term: 'starbucks' } },
-		// {
-		// 	label: 'Bubble Tea',
-		// 	color: '#8BC34A',
-		// 	filter: { term: 'bubble tea' }
-		// },
-		// {
-		// 	label: 'Walking Distance',
-		// 	color: '#00BCD4',
-		// 	filter: { radius: 3000 }
-		// },
-		// {
-		// 	label: 'Extra Hipster',
-		// 	color: '#F44336',
-		// 	filter: { attributes: 'hot_and_new' }
-		// }
+        }
 	];
 
 	state = {
@@ -44,10 +28,10 @@ class HomeScreen extends Component {
 		this.getLocationAsync();
 	}
 
-	getCoffeeShops = async filter => {
+	getStolenBikes = async filter => {
 		const coords = get(this.state.location, 'coords');
 		const userLocation = pick(coords, ['latitude', 'longitude']);
-		let coffeeShops = await YelpService.getCoffeeShops(
+		let coffeeShops = await BikesService.getStolenBikes(
 			userLocation,
 			filter
 		);
@@ -64,11 +48,11 @@ class HomeScreen extends Component {
 
 		let location = await Location.getCurrentPositionAsync({});
 		await this.setState({ location });
-		this.getCoffeeShops();
+		this.getStolenBikes();
 	};
 
 	handleFilterPress = filter => {
-		this.getCoffeeShops(filter);
+		this.getStolenBikes(filter);
 	};
 
 	renderFilterButtons() {
@@ -91,7 +75,7 @@ class HomeScreen extends Component {
 		const { location, coffeeShops } = this.state;
 
 		return (
-			<View style={{ flex: 7 }}>
+			<View style={styles.container}>
 				<Map location={location} places={coffeeShops} />
 				<View style={styles.filters}>{this.renderFilterButtons()}</View>
 			</View>
@@ -100,6 +84,9 @@ class HomeScreen extends Component {
 }
 
 const styles = {
+	container: {
+		flex: 1
+	},
 	filters: {
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
