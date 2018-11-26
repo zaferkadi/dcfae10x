@@ -18,13 +18,10 @@ const initialRegion = {
 const Marker = MapView.Marker;
 
 export default class Map extends Component {
-	constructor(props) {
-		super(props)
-		this.state = {
+	state = {
 			region: null
 		}
-		this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this)
-	}
+
 	componentDidMount() {
 		// console.log(mapSettings());
 	}
@@ -33,7 +30,7 @@ export default class Map extends Component {
 			<Marker key={i} title={place.name} coordinate={place.coords} pinColor="tomato"/>
 		));
 	}
-	onRegionChangeComplete(region) {
+	onRegionChangeComplete = (region) =>{
 		this.setState({ region });
 	}
 	render() {

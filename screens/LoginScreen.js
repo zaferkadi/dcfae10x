@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Button } from 'react-native-elements';
+import { NavigationActions } from 'react-navigation'; // Version can be specified in package.json
 
 class LoginScreen extends Component {
 	filterButtons = [
@@ -11,10 +12,9 @@ class LoginScreen extends Component {
             icon: {name: 'facebook', style: 'regular',type: 'font-awesome'}
         }
     ];
-    handleFilterPress() {
-        console.log('clicked');
-        this.props.onLoggin()
-        
+    handleFilterPress = () => {
+		NavigationActions.navigate({ routeName: 'Home' })
+		this.props.navigation.push('Home')
     }
 
 	renderFilterButtons() {
@@ -36,29 +36,29 @@ class LoginScreen extends Component {
 	render() {
 
 		return (
-			<View style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'stretch',
-                backgroundColor: 'coral'
-                }}>
+			<View style={styles.container}>
                 {this.renderFilterButtons()}
 			</View>
 		);
 	}
 }
 
-const styles = {
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'stretch',
+		backgroundColor: 'coral'
+		},
 	filters: {
 		flexDirection: 'row',
-		justifyContent: 'middle',
+		justifyContent: 'center',
 		alignItems: 'center',
 		flexWrap: 'wrap'
 	},
 	button: {
 		marginVertical: 10
 	}
-};
-
+});
 export { LoginScreen };

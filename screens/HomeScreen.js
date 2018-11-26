@@ -9,9 +9,13 @@ import BikesService from '../services/bikes';
 import Map from '../components/Map';
 
 class HomeScreen extends Component {
+	static navigationOptions = {
+		title: 'Home',
+	  };
+		
 	filterButtons = [
         { 
-            label: 'Report A Stolen Bike', 
+            label: '+', 
             color: 'coral', 
             filter: { openNow: true }, 
             icon: {name: 'bicycle', style: 'regular',type: 'font-awesome'}
@@ -83,19 +87,18 @@ class HomeScreen extends Component {
 	}
 }
 
-const styles = {
+const styles = StyleSheet.create({
 	container: {
 		flex: 1
 	},
 	filters: {
-		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		alignItems: 'center',
-		flexWrap: 'wrap'
+		
 	},
 	button: {
-		marginVertical: 4
+		position: 'absolute',
+		bottom: 0,
+		alignSelf: 'flex-end' //for align to right
 	}
-};
+});
 
 export { HomeScreen };
